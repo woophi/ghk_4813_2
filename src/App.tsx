@@ -14,6 +14,7 @@ import smile from './assets/smile.png';
 import { LS, LSKeys } from './ls';
 import { appSt } from './style.css';
 import { ThxLayout } from './thx/ThxLayout';
+import { sendDataToGA } from './utils/events';
 
 export const App = () => {
   const [step, setStep] = useState(1);
@@ -28,19 +29,16 @@ export const App = () => {
 
   const submit = () => {
     setLoading(true);
-    // sendDataToGA({
-    //   destination: deliveryType,
-    //   address: deliveryType === 'По адресу' ? address : '',
-    //   delivery_date: deliveryType === 'По адресу' ? day : '',
-    //   delivery_time: deliveryType === 'По адресу' ? time : '',
-    //   comments: deliveryType === 'По адресу' ? details : '',
-    // }).then(() => {
-    //   setLoading(false);
-    //   LS.setItem(LSKeys.ShowThx, true);
-    // });
-    setLoading(false);
-    LS.setItem(LSKeys.ShowThx, true);
-    setThx(true);
+    sendDataToGA({
+      destination: deliveryType,
+      delivery_date: deliveryType === 'По адресу' ? day : '',
+      delivery_time: deliveryType === 'По адресу' ? time : '',
+      comments: deliveryType === 'По адресу' ? details : '',
+    }).then(() => {
+      setLoading(false);
+      LS.setItem(LSKeys.ShowThx, true);
+      setThx(true);
+    });
   };
 
   useEffect(() => {
